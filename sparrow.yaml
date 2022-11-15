@@ -1,0 +1,43 @@
+image:
+  - melezhik/sparrow:alpine
+  - melezhik/sparrow:debian
+  
+tasks:
+ -
+  name: test
+  language: Bash
+  code: |
+    set -e
+    export PATH=~/go/bin:$PATH
+    cat << 'HERE' > example.tm
+      let array = ["gophers", "are", "burrowing", "rodents"]
+      let sentence = array | strings.join(" ") | strings.to_upper
+      print(sentence)
+    HERE
+    tamarin example.tm
+  check: |
+    GOPHERS ARE BURROWING RODENTS
+  default: true
+  depends:
+    -
+      name: go_build
+ -
+  name: go_build
+  language: Bash
+  code: |
+    set -e
+    export PATH=/usr/local/go/bin:$PATH
+    go version
+    cd source
+    go install .    
+  depends:
+    -
+      name: install-go
+ -
+    name: install-go
+    language: Bash
+    code: |
+      sudo rm -rf /usr/local/go
+      curl -sfL https://go.dev/dl/go1.19.3.linux-amd64.tar.gz -o ~/go1.19.3.linux-amd64.tar.gz
+      sudo tar -C /usr/local -xzf ~/go*.linux-amd64.tar.gz
+     
