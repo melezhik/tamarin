@@ -1,5 +1,5 @@
 image:
-  - melezhik/sparrow:alpine
+  #- melezhik/sparrow:alpine
   - melezhik/sparrow:debian
   
 tasks:
@@ -14,7 +14,9 @@ tasks:
       let sentence = array | strings.join(" ") | strings.to_upper
       print(sentence)
     HERE
-    tamarin example.tm
+    ls -l example.tm
+    cat example.tm
+    tamarin ./example.tm
   check: |
     GOPHERS ARE BURROWING RODENTS
   default: true
